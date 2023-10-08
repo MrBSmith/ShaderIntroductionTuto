@@ -1,0 +1,70 @@
+[gd_scene load_steps=15 format=3 uid="uid://dbnulwcftwlov"]
+
+[ext_resource type="Shader" path="res://Color.gdshader" id="1_5wxfl"]
+[ext_resource type="Texture2D" uid="uid://u88w6325mp11" path="res://icon.svg" id="2_r4o44"]
+[ext_resource type="Shader" path="res://Noise.gdshader" id="3_a8p6v"]
+[ext_resource type="Shader" path="res://Deformation.gdshader" id="4_f2ogq"]
+[ext_resource type="Shader" path="res://node_2d.gdshader" id="5_0rqv0"]
+[ext_resource type="Texture2D" uid="uid://dfeijletwfag8" path="res://na16-8x.png" id="6_ef3ci"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8x7kl"]
+shader = ExtResource("1_5wxfl")
+shader_parameter/color = Color(0.913725, 0, 0.717647, 1)
+shader_parameter/mix_amount = 0.67
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_3k2mo"]
+noise_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_peskv"]
+seamless = true
+noise = SubResource("FastNoiseLite_3k2mo")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3gs2e"]
+shader = ExtResource("3_a8p6v")
+shader_parameter/movement = Vector2(0.2, 0.095)
+shader_parameter/mix_amount = 0.2
+shader_parameter/noise = SubResource("NoiseTexture2D_peskv")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_0bnue"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_skgdp"]
+seamless = true
+noise = SubResource("FastNoiseLite_0bnue")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sr6kr"]
+shader = ExtResource("4_f2ogq")
+shader_parameter/scale = 0.215
+shader_parameter/movement = Vector2(-0.605, 0.67)
+shader_parameter/amount = 0.12
+shader_parameter/noise = SubResource("NoiseTexture2D_skgdp")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nj1pj"]
+shader = ExtResource("5_0rqv0")
+shader_parameter/nb_colors = 16
+shader_parameter/palette = ExtResource("6_ef3ci")
+
+[node name="Node2D" type="Node2D"]
+
+[node name="ColorMix" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_8x7kl")
+position = Vector2(67, 66)
+texture = ExtResource("2_r4o44")
+
+[node name="Noise" type="Sprite2D" parent="."]
+texture_filter = 1
+texture_repeat = 2
+material = SubResource("ShaderMaterial_3gs2e")
+position = Vector2(312, 61)
+texture = ExtResource("2_r4o44")
+
+[node name="Deformation" type="Sprite2D" parent="."]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_sr6kr")
+position = Vector2(576, 65)
+texture = ExtResource("2_r4o44")
+
+[node name="Palette" type="Sprite2D" parent="."]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_nj1pj")
+position = Vector2(783, 65)
+texture = ExtResource("2_r4o44")
